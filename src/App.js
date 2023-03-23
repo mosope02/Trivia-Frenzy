@@ -1,23 +1,31 @@
-import logo from './logo.svg';
+import { Apicall } from './components/Apicall';
+import { useState } from 'react';
 import './App.css';
+import { Formitems } from './components/Formitems';
+import { QuestionPage } from './components/QuestionPage';
 
 function App() {
+  const [questions, setQuestions] = useState({})
+  const [error, setError] = useState('')
+  const handleFormSubmit = async (categ, limit, difficulty) => {
+    const categList = categ.map((cate)=>{return cate.value})
+    try {
+      const response = await Apicall(categList,difficulty,limit)
+      setQuestions(response)
+      console.log(response);
+    } catch (error) {
+      setError(error)
+    }
+  }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div>
+        {
+          questions.status === 200 ? <QuestionPage fetchedQuestions={questions.data} /> : error.status > 399 ? <div>OOPS! {error.data}</div> : <Formitems onSubmit={handleFormSubmit} />
+        }
+      </div>
+      
+      
     </div>
   );
 }
