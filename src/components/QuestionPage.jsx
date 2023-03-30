@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import { useEffect } from 'react';
+import { Score } from './Score';
 
 function shuffle(arr) {
         const length = arr.length;
@@ -20,13 +22,19 @@ function shuffle(arr) {
 export const QuestionPage = ({fetchedQuestions}) => {
     // State for the questio being displayed
     const [currentQuestion, setCurrentQuestion] = useState(0)
+    const [quizComplete, setQuizComplete] = useState(false)
     // To disable clicking options after the question has been attempted once.
     const [disabled, setDisabled] = useState(false)
     //State for the score of the current session
     const [score, setScore] = useState(0)
     // Add the Correct Answer to the array of incorrect Answers, then shuffle them.
-    const shuffledAnswers = shuffle(fetchedQuestions[currentQuestion].incorrectAnswers.concat(fetchedQuestions[currentQuestion].correctAnswer))
+    const options = fetchedQuestions[currentQuestion].incorrectAnswers.concat(fetchedQuestions[currentQuestion].correctAnswer)
+    const [shuffled, setShuffled] = useState([])
     const alphabets = ["A", "B", "C", "D"]
+
+    useEffect(()=>{
+        setShuffled(shuffle(options))
+    }, [currentQuestion])
 
     //Disable buttons after attempting once, then increase the score if the guess was right.
     const handleCorrectAnswer = (answer) => {
@@ -37,21 +45,23 @@ export const QuestionPage = ({fetchedQuestions}) => {
       }
 
       //Display the next question, then
+      const nextQuestion = currentQuestion + 1
       const handleNext = () => {
-        const nextQuestion = currentQuestion + 1
+        
         if (nextQuestion < fetchedQuestions.length && disabled) {
             setCurrentQuestion(nextQuestion)
             setDisabled(!disabled)
         } else if (nextQuestion === fetchedQuestions.length) {
-            alert (`You scored ${score} / ${fetchedQuestions.length}`)
-            setTimeout(()=>{window.location.reload()}, 800)
+            setQuizComplete(true)
             
         }
       }
 
   return (
     <>
-        <div className='bg-[#FCE0B0] h-[100vh] pt-8 shadow-lg'>
+        {
+            quizComplete ? <Score score={score} length={fetchedQuestions.length} /> :         
+            <div className='bg-[#FCE0B0] h-[100vh] pt-8 shadow-lg'>
             <p className='text-center font-semibold text-xl w-fit py-2 px-4 mx-auto bg-[#FDAB71]'>{`${currentQuestion +1}/${fetchedQuestions.length}`}</p>
             <div className='w-[96%] max-w-sm md:max-w-3xl mx-auto bg-[#49302B] mt-8 md:grid grid-cols-2 px-2 py-9'>
                 {/* left side */}
@@ -61,7 +71,7 @@ export const QuestionPage = ({fetchedQuestions}) => {
                 {/* Right Side */}
                 <div className='md:ml-4'>
                     {
-                        shuffledAnswers.map((ans, index)=>{
+                        shuffled.map((ans, index)=>{
                             return <div>
                                     <button disabled={disabled} className={` ${disabled ? ans === fetchedQuestions[currentQuestion].correctAnswer ? "border-4 shadow-xl border-solid border-green-800":"border-2 border-solid border-red-800" : ""} text-left py-2 px-2 block mb-4 h-fit min-h-[56px] bg-[#FDFBEE] w-full rounded-xl`} key={index} value={ans} onClick={()=>{handleCorrectAnswer(ans)}}><span className='h-fit px-3 py-2 w-fit rounded-full text-center bg-[#CFCFCF]'>{alphabets[index]}.</span> {ans}</button>
                                    </div>
@@ -75,6 +85,7 @@ export const QuestionPage = ({fetchedQuestions}) => {
             
             
         </div>
+        }
     </>
   )
 }

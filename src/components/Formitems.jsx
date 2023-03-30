@@ -20,7 +20,7 @@ export const Formitems = (props) => {
   // const [formData, setFormData] = useState({difficulty:'easy', limit:'5'})
   const [difficulty, setDifficulty] = useState('easy')
   const [limit, setLimit] = useState('5')
-  const [categoriesList, setCategoriesList] = useState([{label:'General Knowledge', value:'general_knowledge'}])
+  const [categoriesList, setCategoriesList] = useState([])
   
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -56,7 +56,7 @@ export const Formitems = (props) => {
               </div>
 
               <div className='flex flex-nowrap gap-4 mt-4'>
-                <span className='inline-block'>No of Questions: {limit}</span>
+                <span className='inline-block font-semibold'>No of Questions: {limit}</span>
                 <input type="range" min='1' name='limit' className='inline-block w-9/12 ' value={limit} max='20' onChange={handleLimitChange} />
               </div>
               <div className='text-right mt-6 pr-4'><button className='bg-[#FDAB71] py-3 px-5 rounded-2xl font-semibold' type="submit">START</button></div>
