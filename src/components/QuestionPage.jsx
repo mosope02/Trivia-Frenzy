@@ -34,6 +34,7 @@ export const QuestionPage = ({fetchedQuestions}) => {
     useEffect(()=>{
         setShuffled(shuffle(options))
     }, [currentQuestion])
+    
 
     //Disable buttons after attempting once, then increase the score if the guess was right.
     const handleCorrectAnswer = (answer) => {
@@ -61,7 +62,9 @@ export const QuestionPage = ({fetchedQuestions}) => {
         {
             quizComplete ? <Score score={score} length={fetchedQuestions.length} /> :         
             <div className='bg-[#FCE0B0] h-[100vh] pt-8 shadow-lg'>
-            <p className='text-center font-semibold text-xl w-fit py-2 px-4 mx-auto bg-[#FDAB71]'>{`${currentQuestion +1}/${fetchedQuestions.length}`}</p>
+                <div className='w-[96%] max-w-sm md:max-w-3xl mx-auto text-center flex justify-center gap-5'>
+                <p className='text-center font-semibold text-xl w-fit py-2 px-4 bg-[#FDAB71] inline-block'>{`${currentQuestion +1}/${fetchedQuestions.length}`}</p> <p className='text-center font-semibold text-xl w-fit py-2 px-4 bg-[#FDAB71] inline-block'>Score: {score}</p>
+                </div>
             <div className='w-[96%] max-w-sm md:max-w-3xl mx-auto bg-[#49302B] mt-8 md:grid grid-cols-2 px-2 py-9'>
                 {/* left side */}
                 <div className='bg-[#FDFBEE] px-2 py-5 h-fit mb-6 md:mb-0 min-h-[150px] text-2xl rounded-lg'>
@@ -72,7 +75,7 @@ export const QuestionPage = ({fetchedQuestions}) => {
                     {
                         shuffled.map((ans, index)=>{
                             return <div>
-                                    <button disabled={disabled} className={` ${disabled ? ans === fetchedQuestions[currentQuestion].correctAnswer ? "border-4 shadow-xl border-solid border-green-800":"border-2 border-solid border-red-800" : ""} text-left py-2 px-2 block mb-4 h-fit min-h-[56px] bg-[#FDFBEE] w-full rounded-xl`} key={index} value={ans} onClick={()=>{handleCorrectAnswer(ans)}}><span className='h-fit px-3 py-2 w-fit rounded-full text-center bg-[#CFCFCF]'>{alphabets[index]}.</span> {ans}</button>
+                                    <button disabled={disabled} className={` ${disabled ? ans === fetchedQuestions[currentQuestion].correctAnswer ? "bg-green-500 font-semibold":"bg-red-500" : ""} text-left py-2 px-2 block mb-4 h-fit min-h-[56px] bg-[#FDFBEE] w-full rounded-xl`} key={index} value={ans} onClick={()=>{handleCorrectAnswer(ans)}}><span className='h-fit px-3 py-2 w-fit rounded-full text-center bg-[#CFCFCF]'>{alphabets[index]}.</span> {ans}</button>
                                    </div>
                         })
                     }

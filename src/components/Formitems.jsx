@@ -43,7 +43,7 @@ export const Formitems = (props) => {
           <form onSubmit={handleSubmit} className="w-[96%] max-w-sm md:max-w-3xl mx-auto bg-[#49302B] text-white font-light px-3 py-5 rounded-md">
               <div className='flex flex-nowrap gap-4 md:gap-6 py-6'>
                 <p className='text-lg font-semibold inline-block'>Categories:</p>
-                <MultiSelect options={categories} className="text-black font-semibold inline-block w-full" value={categoriesList} onChange={setCategoriesList} hasSelectAll={false} disableSearch required />
+                <MultiSelect options={categories} className="text-black font-semibold inline-block w-full" value={categoriesList} onChange={setCategoriesList} hasSelectAll={false} disableSearch placeholder="Select one or more categories" required />
               </div>
         
               <div className='flex flex-nowrap gap-4 pb-10'>
